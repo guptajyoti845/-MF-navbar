@@ -9,12 +9,22 @@ const lifecycles = singleSpaReact({
   ReactDOM,
   rootComponent: Root,
   domElementGetter,
-  props: {
-    accessToken: ""
-  }
+  errorBoundary(err, info, props) {
+    // Customize the root error boundary for your microfrontend here.
+    return <div className="mt-16">Error Happened</div>;
+  },
 });
 
-export const { bootstrap, mount, unmount } = lifecycles;
+export const {  bootstrap, unmount } = lifecycles;
+
+export function mount(props) {
+  if(props.authToken === 'd83jD63UdZ6RS6f70D0'){ 
+    return lifecycles.mount(props);
+  }
+  return Promise.reject().catch(() => {
+    console.log('Error in Authentication!');
+  });
+}
 
 function domElementGetter() {
   let shouldCreateNew = false;
